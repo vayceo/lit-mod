@@ -357,7 +357,19 @@ public OnPlayerSpawn(playerid)
 }
 public OnPlayerDeath(playerid, killerid, reason)
 {
+    new fmt_text[120];
     Debug[playerid] = false;
+    
+    if(killerid == INVALID_PLAYER_ID || reason >= 47 || !reason)
+	{
+		format(fmt_text, sizeof fmt_text, "[A] %s[%d] убил себя", GetPlayerName(playerid), playerid);
+		AdmMSG(0x999999FF, fmt_text);
+	}
+	else
+	{
+		format(fmt_text, sizeof fmt_text, "[A] %s[%d] убил %s[%d] (%s)", GetPlayerName(killerid), killerid, GetPlayerName(playerid), playerid, GetWeaponName(reason));
+		AdmMSG(0x999999FF, fmt_text);
+	}
     
 	return true;
 }
@@ -1896,6 +1908,38 @@ CMD:csettime(playerid, params[])
 	format(fmt_text, sizeof fmt_text, "Вы установили время %02d:00 у себя", time);
     SendClientMessage(playerid, color_blue, fmt_text);
     
+	return 1;
+}
+
+stock IsPlayerDriver(playerid)
+{
+	return (IsPlayerInAnyVehicle(playerid) && GetPlayerState(playerid) == PLAYER_STATE_DRIVER);
+}
+
+CMD:eject(playerid, params[])
+{
+	new vehicleid = GetPlayerVehicleID(playerid);
+
+	if(!vehicleid || !IsPlayerDriver(playerid))
+		return SendClientMessage(playerid, 0x999999FF, "Вы должны сидеть за рулем транспорта");
+
+	if(!strlen(params))
+		return SendClientMessage(playerid, 0x999999FF, "Используйте: /eject [id игрока]");
+
+	extract params -> new to_player;
+
+	if(vehicleid != GetPlayerVehicleID(to_player) || playerid == to_player)
+		return SendClientMessage(playerid, 0x999999FF, "Игрок должен сидеть в Вашем транспорте");
+
+	RemovePlayerFromVehicle(to_player);
+
+	new fmt_str[64];
+	format(fmt_str, sizeof fmt_str, "%s выкинул Вас из своего транспорта", GetPlayerName(playerid));
+	SendClientMessage(to_player, 0x3399FFFF, fmt_str);
+
+	format(fmt_str, sizeof fmt_str, "Вы выкинули %s из своего транспорта", GetPlayerName(to_player));
+	SendClientMessage(playerid, 0x3399FFFF, fmt_str);
+
 	return 1;
 }
 

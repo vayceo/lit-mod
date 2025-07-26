@@ -1031,3 +1031,21 @@ CMD:spoff(playerid, params[])
 
     return 1;
 }
+
+CMD:agm(playerid, params[])
+{
+	if(GetPlayerAdminEx(playerid) < 1) return 1;
+    if(GetPVarInt(playerid,"agm") == 0)
+    {
+        SetPVarInt(playerid,"agm", 1);
+        SetPlayerHealth(playerid, 0x7F800000);
+        SendClientMessage(playerid, -1, "AGM ON");
+    }
+    else
+    {
+        SetPVarInt(playerid,"agm", 0);
+        SetPlayerHealth(playerid, 100.0);
+        SendClientMessage(playerid, -1, "AGM OFF");
+    }
+    return 1;
+}
