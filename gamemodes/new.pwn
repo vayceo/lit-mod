@@ -2013,3 +2013,21 @@ CMD:tuning(playerid, params[])
 
     return 1;
 }
+
+CMD:changecolor(playerid, params[])
+{
+    if(!IsPlayerInAnyVehicle(playerid))
+  return SendClientMessage(playerid, -1, ""USC"Вы должны быть за рулем!");
+
+  extract params -> new color; else return SendClientMessage(playerid, 0xCECECEFF, "{ffff00}|{ffffff} Используйте: /changecolor [id цвета]");
+
+    if(!(0 <= color <= 126)) return SendClientMessage(playerid, 0xCECECEFF, "{ffff00}|{ffffff}Используйте id цвета от 0 до 126");
+
+    new vehicleid = GetPlayerVehicleID(playerid);
+
+    ChangeVehicleColor(vehicleid, color);
+
+   SendClientMessage(playerid, color_white, "Цвет вашего автомобиля успешно изменен!");
+
+    return 1;
+}
