@@ -2,12 +2,14 @@
 
 // ............. [ DEFINES ] .............
 #define SPD ShowPlayerDialog
-#define SCM SendClientMessage
 #define DSL DIALOG_STYLE_LIST
 #define SC "{ffff00}| {ffffff}"
 #define USC "{ff2400}| {ffffff}"
-// ............. [ COLORS ] .............
-#define color_white 0xFFFFFF
+
+#if !defined color_white
+    #define color_white 0xffffffAA
+#endif
+
 // ............. [ NEWS ] .............
 new playerVehicleID[MAX_PLAYERS];
 
@@ -17,7 +19,7 @@ DIALOG_CAR(playerid)
     Dialog_Open
     (
         playerid, Dialog:CAR_LIST, DSL, 
-        "{3FD7D0}LIT MOBILE {FFFFFF}| АВТО", 
+        "{3FD7D0}"SHORT_NAME" {FFFFFF}| АВТО", 
         "VAZ\n\
         Mercedes\n\
         BMW\n\
@@ -381,7 +383,7 @@ SpawnPlayerVehicle(playerid, vehicleID)
     }
     else
     {
-        SCM(playerid, color_white, ""USC"не удалось создать транспортное средство.");
+        SendClientMessage(playerid, color_white, ""USC"не удалось создать транспортное средство.");
     }
 
     return 1;

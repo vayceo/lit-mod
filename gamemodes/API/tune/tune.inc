@@ -2,13 +2,17 @@
 
 // ............. [ DEFINES ] .............
 #define SPD ShowPlayerDialog
-#define SCM SendClientMessage
 #define DSL DIALOG_STYLE_LIST
 #define SC "{ffff00}| {ffffff}"
 #define USC "{ff2400}| {ffffff}"
 // ............. [ COLORS ] .............
-#define color_white 0xFFFFFF
-#define         color_gray              0x999999
+#if !defined color_white
+    #define color_white 0xffffffAA
+#endif
+
+#if !defined color_gray
+    #define color_gray 0x999999AA
+#endif
 // ............. [ NEWS ] .............
 // ............. [ DIALOGS ] .............
 DIALOG_TUNE(playerid)
@@ -16,7 +20,7 @@ DIALOG_TUNE(playerid)
     Dialog_Open
     (
         playerid, Dialog:TUNE, DSL, 
-        "{3FD7D0}LIT MOBILE {FFFFFF}| ТЮНИНГ",
+        "{3FD7D0}"SHORT_NAME" {FFFFFF}| ТЮНИНГ",
         "{FFFFFF}| Сменить цвет\n\
 		Компоненты",
         "Далее", "Отмена"
@@ -29,7 +33,7 @@ DIALOG_COLOR(playerid)
     Dialog_Open
     (
         playerid, Dialog:COLOR, DSL, 
-        "LIT MOBILE | Выберите цвет", 
+        ""SHORT_NAME" | Выберите цвет", 
         "Белый\n\
         Черный\n\
         Красный\n\
@@ -45,7 +49,7 @@ DIALOG_COMP(playerid)
     Dialog_Open
     (
         playerid, Dialog:COMP, DSL, 
-        "LIT MOBILE | Выберите компонент",
+        ""SHORT_NAME" | Выберите компонент",
         "Гидравлика\n\
         Нитро",
         "Выбрать", "Закрыть"
@@ -59,7 +63,7 @@ CMD:tune(playerid)
 	{
 	    DIALOG_TUNE(playerid);
 	}
-	else return SCM(playerid, color_gray, ""USC"Вы должны быть за рулем.");
+	else return SendClientMessage(playerid, color_gray, ""USC"Вы должны быть за рулем.");
 	return 1;
 }
 
