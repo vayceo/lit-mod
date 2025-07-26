@@ -41,18 +41,24 @@ main(); // what is that?
 #define MySQL_Pass "password"
 // ............. [ COLORS ] .............
 #define         color_main              0xbb7dffAA
-#define         color_white             0xffffffAA
 #define         color_red               0xd54a4aAA
 #define         color_blue              0x55adffAA
 #define         color_green             0x7aca74AA
 #define         color_orange            0xffad55AA
 #define         color_yellow            0xf9b961AA
 #define         color_purple            0xea8afdAA
-#define         color_gray              0x999999AA
 #define         color_brown             0x97754fAA
 #define         color_black             0x080808AA
 #define         color_achat       0x3FD7D0AA
 #define         color_lightyellow       0xe1daa3AA
+
+#if !defined color_white
+    #define color_white 0xffffffAA
+#endif
+
+#if !defined color_gray
+    #define color_gray 0x999999AA
+#endif
 
 #define SC              "{ffff00}| {ffffff}"
 #define USC             "{ff2400}| {ffffff}"
@@ -76,7 +82,6 @@ main(); // what is that?
 #define SERVER_NAME 	"LIT MOBILE"
 // ............. [ DEFINES ] .............
 #define SPD ShowPlayerDialog
-#define SCM SendClientMessage
 #define Send SendClientMessage
 #define SCMTA SendClientMessageToAll
 #define DSL DIALOG_STYLE_LIST
@@ -300,7 +305,7 @@ public OnPlayerSpawn(playerid)
 		SetPlayerSpawn(playerid);
 	}
 	else {
-		SCM(playerid, color_white, ""USC"Вы не авторизовались!");
+		SendClientMessage(playerid, color_white, ""USC"Вы не авторизовались!");
 	}
 	return true;
 }
@@ -320,7 +325,7 @@ public OnPlayerText(playerid, text[])
 {
     if (!login_check[playerid])
     {
-        SCM(playerid, color_gray, "Вы не авторизованы.");
+        SendClientMessage(playerid, color_gray, "Вы не авторизованы.");
         return false;
     }
 
@@ -329,7 +334,7 @@ public OnPlayerText(playerid, text[])
     {
 	    if (player_info[playerid][pMute] >= 1)
 	    {
-	        SCM(playerid, color_gray, "У вас активный мут.");
+	        SendClientMessage(playerid, color_gray, "У вас активный мут.");
 	        SetPlayerChatBubble(playerid, "<<MUTED>>", color_red, 20.0, 7500);
 
 	        new remaining_time = (player_info[playerid][pMuteStartTime] + player_info[playerid][pMuteDuration]) - gettime();
@@ -337,7 +342,7 @@ public OnPlayerText(playerid, text[])
 	        {
 	            new time_msg[128];
 	            format(time_msg, sizeof(time_msg), "До конца мута: %d секунд", remaining_time);
-	            SCM(playerid, color_red, time_msg);
+	            SendClientMessage(playerid, color_red, time_msg);
 	        }
 
 	        return false;
@@ -346,7 +351,7 @@ public OnPlayerText(playerid, text[])
 
     if (strlen(text) > 144)
     {
-        SCM(playerid, color_red, "Слишком длинный текст! Не более 144 символов.");
+        SendClientMessage(playerid, color_red, "Слишком длинный текст! Не более 144 символов.");
         return false;
     }
 
@@ -355,7 +360,7 @@ public OnPlayerText(playerid, text[])
     {
         if (currentTime < floodBlockTime[playerid])
         {
-            SCM(playerid, color_gray, "Не флудите. Подождите перед отправкой.");
+            SendClientMessage(playerid, color_gray, "Не флудите. Подождите перед отправкой.");
             return false;
         }
         floodBlockTime[playerid] = currentTime + FLOOD_BLOCK_TIME; // 5 second mute
@@ -505,24 +510,24 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	            if(!len)
 	            {
 	                ShowRegister(playerid);
-	                return SCM(playerid, color_gray, "Вы ничего не ввели.");
+	                return SendClientMessage(playerid, color_gray, "Вы ничего не ввели.");
 	            }
 	            if(!(6 <= len <= 32))
 	            {
 	                ShowRegister(playerid);
-					return SCM(playerid, color_gray, !"Неверная длина пароля.");
+					return SendClientMessage(playerid, color_gray, !"Неверная длина пароля.");
 	            }
 	            if(CheckRusText(inputtext, len+1))
 				{
 				    ShowRegister(playerid);
-				    return SCM(playerid, color_gray, !"Смените раскладку клавиатуры.");
+				    return SendClientMessage(playerid, color_gray, !"Смените раскладку клавиатуры.");
 				}
 				strmid(player_info[playerid][pPassword], inputtext, 0, len, 32+1);
 				ShowPassCheck(playerid);
 	        }
 	        else
 	        {
-	            SCM(playerid, color_red, !"Введите /q[uit]");
+	            SendClientMessage(playerid, color_red, !"Введите /q[uit]");
 	            Pkick(playerid);
 	        }
 	    }
@@ -531,7 +536,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			if(!strcmp(player_info[playerid][pPassword], inputtext)) ShowEmail(playerid);
 			else
 			{
-			    SCM(playerid, color_red, !"Неверный пароль.");
+			    SendClientMessage(playerid, color_red, !"Неверный пароль.");
 				return Pkick(playerid);
 			}
 	    }
@@ -542,22 +547,22 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				if(!len)
 				{
 				    ShowEmail(playerid);
-				    return SCM(playerid, color_gray, !"Вы ничего не ввели.");
+				    return SendClientMessage(playerid, color_gray, !"Вы ничего не ввели.");
 				}
 				if(!(6 <= len <= 46))
 				{
 				    ShowEmail(playerid);
-				    return SCM(playerid, color_gray, !"Неверная длина Элетронной почты.");
+				    return SendClientMessage(playerid, color_gray, !"Неверная длина Элетронной почты.");
 				}
 				if(strfind(inputtext, "@", false) == -1 || strfind(inputtext, ".", false) == -1)
 				{
 				    ShowEmail(playerid);
-				    return SCM(playerid, color_gray, !"Неверный формат Электронной почты.");
+				    return SendClientMessage(playerid, color_gray, !"Неверный формат Электронной почты.");
 				}
 				if(CheckRusText(inputtext, len+1))
 				{
 				    ShowEmail(playerid);
-				    return SCM(playerid, color_gray, !"Смените раскладку клавиатуры.");
+				    return SendClientMessage(playerid, color_gray, !"Смените раскладку клавиатуры.");
 				}
 			    strmid(player_info[playerid][pEmail], inputtext, 0, len, 46+1);
 			    
@@ -565,8 +570,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		        month_server,
 		        day_server;
 		        
-			    SCM(playerid, color_white, ""SC"Вы успешно зарегистрировались");
-			    SCM(playerid, color_white, ""SC"Авторизуйтесь в аккаунт.");
+			    SendClientMessage(playerid, color_white, ""SC"Вы успешно зарегистрировались");
+			    SendClientMessage(playerid, color_white, ""SC"Авторизуйтесь в аккаунт.");
 			    login_check[playerid] = true;
 			    update_timer[playerid] = SetTimerEx("UpdateTime", 1000, false, "i", playerid);
 			    Freeze(playerid, 1);
@@ -607,7 +612,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	        	if(isnull(inputtext))
 				{
 	                ShowLogin(playerid);
-	                return SCM(playerid, color_gray, "Вы ничего не ввели.");
+	                return SendClientMessage(playerid, color_gray, "Вы ничего не ввели.");
 	            }
 				static fmt_str[] = "SELECT * FROM `accounts` WHERE `id` = '%d' AND `password` = '%e' LIMIT 1";
 				new string[sizeof(fmt_str)+37];
@@ -616,7 +621,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			}
 			else
 			{
-			    SCM(playerid, color_red, !"Введите /q[uit]");
+			    SendClientMessage(playerid, color_red, !"Введите /q[uit]");
 	            Pkick(playerid);
 			}
 	    }
@@ -751,7 +756,7 @@ public OnPlayerCommandReceived(playerid, cmd[], params[], flags)
 {
     if(login_check[playerid] == false)
 	{
-	    SCM(playerid, color_gray, !"Вы не авторизованы.");
+	    SendClientMessage(playerid, color_gray, !"Вы не авторизованы.");
 	    return false;
 	}
 	return true;
@@ -773,7 +778,7 @@ public UnmutePlayer(to_player)
         UpdatePlayerDatabaseInt(to_player, "Mute", 0);
         player_info[to_player][pMute] = 0;
 
-        SCM(to_player, color_gray, "Доступ в чат восстановлен.");
+        SendClientMessage(to_player, color_gray, "Доступ в чат восстановлен.");
 
         new fmt_msg[80];
         format(fmt_msg, sizeof(fmt_msg), "Снял блокировку чата у %s[acc:%d]", player_info[to_player][pName], player_info[to_player][pId]);
@@ -838,7 +843,7 @@ public OnPlayerTimer(playerid)
 
 			if (player_info[playerid][pMute] <= 0)
 			{
-				SCM(playerid, color_gray, "Срок действия бана чата закончился");
+				SendClientMessage(playerid, color_gray, "Срок действия бана чата закончился");
 			}
 		}
 	}
@@ -910,9 +915,9 @@ public PlayerLogin(playerid)
         cache_get_field_content(0, "prefix", player_info[playerid][pPrefix], dbHandle, 15+1);
 	    //== == == == == == == == == == == == == == == == == == == == == == ==
 	    login_check[playerid] = true;
-        	SCM(playerid, color_gray, "Добро пожаловать на наш МТА сервер!");
-	SCM(playerid, color_gray, "Телеграмм-канал проекта: "c_lightyellow"t.me/lit_energy_mta");
-	SCM(playerid, color_gray, "Глобальный чат: "c_lightyellow"/v");
+        	SendClientMessage(playerid, color_gray, "Добро пожаловать на наш МТА сервер!");
+	SendClientMessage(playerid, color_gray, "Телеграмм-канал проекта: "c_lightyellow"t.me/lit_energy_mta");
+	SendClientMessage(playerid, color_gray, "Глобальный чат: "c_lightyellow"/v");
     SendClientMessage(playerid, -1, ""SC"Для просмотра списка команд используйте {ffff00}/help");
 
 	    SetTimerEx("FastSpawn", 100, false, "i", playerid);
@@ -934,12 +939,12 @@ public PlayerLogin(playerid)
 	    if(number_pass{playerid} == 3)
 	    {
 	        Pkick(playerid);
-	        return SCM(playerid, color_red, !"Попытки на ввод пароля закончены. Введите /q[uit]");
+	        return SendClientMessage(playerid, color_red, !"Попытки на ввод пароля закончены. Введите /q[uit]");
 	    }
 	    static const fmt_str[] = "Неверный пароль. Осталось попыток: %d";
 		new string[sizeof(fmt_str)];
 		format(string, sizeof(string), fmt_str, 3-number_pass{playerid});
-		SCM(playerid, color_red, string);
+		SendClientMessage(playerid, color_red, string);
 	    ShowLogin(playerid);
 	}
 	return true;
@@ -964,7 +969,7 @@ public OnAdminStatsLoad(playerid) {
 }
 public CheckLogin(playerid)
 {
-	SCM(playerid, color_red, !"Время на авторизацию вышло. Введите /q[uit]");
+	SendClientMessage(playerid, color_red, !"Время на авторизацию вышло. Введите /q[uit]");
 	Pkick(playerid);
 	return true;
 }
@@ -1121,7 +1126,7 @@ stock AdmMSG(color, text[], a_level = 1)
 	{
 		if (GetPlayerAdminEx(playerid) < a_level) continue;
 
-		SCM(playerid, color, text);
+		SendClientMessage(playerid, color, text);
 		count ++;
 	}
 	return count;
@@ -1384,11 +1389,11 @@ stock ProxDetector(Float:radi, playerid, string[], col1, col2, col3, col4, col5)
 			X_3 = (X_2 - X);
 			Y_3 = (Y_2 - Y);
 			Z_3 = (Z_2 - Z);
-			if(((X_3 < radi/16) && (X_3 > -radi/16)) && ((Y_3 < radi/16) && (Y_3 > -radi/16)) && ((Z_3 < radi/16) && (Z_3 > -radi/16))) SCM(i, col1, string);
-			else if(((X_3 < radi/8) && (X_3 > -radi/8)) && ((Y_3 < radi/8) && (Y_3 > -radi/8)) && ((Z_3 < radi/8) && (Z_3 > -radi/8))) SCM(i, col2, string);
-			else if(((X_3 < radi/4) && (X_3 > -radi/4)) && ((Y_3 < radi/4) && (Y_3 > -radi/4)) && ((Z_3 < radi/4) && (Z_3 > -radi/4))) SCM(i, col3, string);
-			else if(((X_3 < radi/2) && (X_3 > -radi/2)) && ((Y_3 < radi/2) && (Y_3 > -radi/2)) && ((Z_3 < radi/2) && (Z_3 > -radi/2))) SCM(i, col4, string);
-			else if(((X_3 < radi) && (X_3 > -radi)) && ((Y_3 < radi) && (Y_3 > -radi)) && ((Z_3 < radi) && (Z_3 > -radi))) SCM(i, col5, string);
+			if(((X_3 < radi/16) && (X_3 > -radi/16)) && ((Y_3 < radi/16) && (Y_3 > -radi/16)) && ((Z_3 < radi/16) && (Z_3 > -radi/16))) SendClientMessage(i, col1, string);
+			else if(((X_3 < radi/8) && (X_3 > -radi/8)) && ((Y_3 < radi/8) && (Y_3 > -radi/8)) && ((Z_3 < radi/8) && (Z_3 > -radi/8))) SendClientMessage(i, col2, string);
+			else if(((X_3 < radi/4) && (X_3 > -radi/4)) && ((Y_3 < radi/4) && (Y_3 > -radi/4)) && ((Z_3 < radi/4) && (Z_3 > -radi/4))) SendClientMessage(i, col3, string);
+			else if(((X_3 < radi/2) && (X_3 > -radi/2)) && ((Y_3 < radi/2) && (Y_3 > -radi/2)) && ((Z_3 < radi/2) && (Z_3 > -radi/2))) SendClientMessage(i, col4, string);
+			else if(((X_3 < radi) && (X_3 > -radi)) && ((Y_3 < radi) && (Y_3 > -radi)) && ((Z_3 < radi) && (Z_3 > -radi))) SendClientMessage(i, col5, string);
 		}
 	}
 	return 1;
@@ -1533,7 +1538,7 @@ stock SetConnectServer(playerid)
 	}
 	else
 	{
-		SCM(playerid, color_red, !"Сервер выключен на технические работы.");
+		SendClientMessage(playerid, color_red, !"Сервер выключен на технические работы.");
 		Pkick(playerid);
 	}
 	cache_delete(result);
@@ -1560,7 +1565,7 @@ stock ShowFreeSkin(playerid)
 }
 stock ShowPersonSkin(playerid)
 {
-	SCM(playerid, color_white, ""USC"В разработке");
+	SendClientMessage(playerid, color_white, ""USC"В разработке");
 
 	// rqce finish it
 	/*if(запрос в базу)
@@ -1579,7 +1584,7 @@ stock RestartServer()
 stock SendErr(playerid,string[])
 {
  	format(String256f,sizeof(String256f),"• {AC0000}[Ошибка] "cWH"%s",string);
-	SCM(playerid,0xFFFFFFFF, String256f);
+	SendClientMessage(playerid,0xFFFFFFFF, String256f);
 	return 1;
 }
 stock time_to_words(number)
@@ -1627,10 +1632,10 @@ CMD:veh(playerid, params[])
 
     new vehicleID, color1, color2;
     if (sscanf(params, "iii", vehicleID, color1, color2))
-        return SCM(playerid, -1, ""USC"Введите: "c_lightyellow"/veh [id т/с] [color1] [color2]");
+        return SendClientMessage(playerid, -1, ""USC"Введите: "c_lightyellow"/veh [id т/с] [color1] [color2]");
 
     if (vehicleID < 400 || vehicleID > 3000 || color1 < 0 || color1 > 255 || color2 < 0 || color2 > 255)
-        return SCM(playerid, 0xbfbfbfff, ""USC"ID т/с: 400-3000, цвет: 0-255.");
+        return SendClientMessage(playerid, 0xbfbfbfff, ""USC"ID т/с: 400-3000, цвет: 0-255.");
 
     new Float:x, Float:y, Float:z, Float:rot;
     GetPlayerPos(playerid, x, y, z);
@@ -1638,7 +1643,7 @@ CMD:veh(playerid, params[])
 
 
     new vehID = AddStaticVehicleEx(vehicleID, x, y, z, rot, color1, color2, -1);
-    if (!vehID) return SCM(playerid, 0xbfbfbfff, ""USC"Ошибка при создании Т/С.");
+    if (!vehID) return SendClientMessage(playerid, 0xbfbfbfff, ""USC"Ошибка при создании Т/С.");
 
 
     playerCreatedVehicleID[playerid] = vehID;
@@ -1651,7 +1656,7 @@ CMD:veh(playerid, params[])
     AdmMSG(color_gray, msg);
 
     SendLog(playerid, LOG_TYPE_ADMIN_ACTION, msg);
-    return SCM(playerid, -1, ""SC"Транспортное средство успешно создано.");
+    return SendClientMessage(playerid, -1, ""SC"Транспортное средство успешно создано.");
 }
 
 CMD:setadm(playerid, params[])
@@ -1662,16 +1667,16 @@ CMD:setadm(playerid, params[])
     new targetName[MAX_PLAYER_NAME];
 
     if (sscanf(params, "si", targetName, adminLevel))
-        return SCM(playerid, color_red, ""USC"Введите: "c_lightyellow"/setadm [ник игрока] [уровень]");
+        return SendClientMessage(playerid, color_red, ""USC"Введите: "c_lightyellow"/setadm [ник игрока] [уровень]");
 
     if (adminLevel < 0 || adminLevel > 5)
-        return SCM(playerid, color_red, ""USC"Неверный уровень админки (0-5).");
+        return SendClientMessage(playerid, color_red, ""USC"Неверный уровень админки (0-5).");
 
     targetID = GetPlayerByName(targetName);
     if (targetID == -1)
     {
         if (!UpdatePlayerDatabaseIntByName(targetName, "admin", adminLevel))
-            return SCM(playerid, color_red, ""USC"Игрок с таким ником не найден.");
+            return SendClientMessage(playerid, color_red, ""USC"Игрок с таким ником не найден.");
 
         new prefix[16];
         AdmPreff(adminLevel, prefix, sizeof(prefix));
@@ -1726,10 +1731,10 @@ CMD:spawn(playerid, params[])
 
     new targetid;
     if (sscanf(params, "u", targetid))
-        return SCM(playerid, color_red, ""USC"Введите: "c_lightyellow"/spawn [id игрока]");
+        return SendClientMessage(playerid, color_red, ""USC"Введите: "c_lightyellow"/spawn [id игрока]");
 
     if (!IsPlayerConnected(targetid))
-        return SCM(playerid, color_red, ""USC"Игрок с таким ID не подключен.");
+        return SendClientMessage(playerid, color_red, ""USC"Игрок с таким ID не подключен.");
 
     new msg[128];
     format(msg, sizeof(msg), "[A] %s %s[%i] заспавнил игрока %s[%i]", player_info[playerid][pPrefix], player_info[playerid][pName], playerid, player_info[targetid][pName], targetid);
@@ -1744,8 +1749,8 @@ CMD:a(playerid, params[])
 {
     if(GetPlayerAdminEx(playerid) < 1) return 1;
 
-    if (sscanf(params, "s[144]", params)) return SCM(playerid, color_white, ""USC"Введите: "c_lightyellow"/a [текст]");
-    if (strlen(params) > 104) return SCM(playerid, color_red, ""USC"Слишком длинное сообщение!");
+    if (sscanf(params, "s[144]", params)) return SendClientMessage(playerid, color_white, ""USC"Введите: "c_lightyellow"/a [текст]");
+    if (strlen(params) > 104) return SendClientMessage(playerid, color_red, ""USC"Слишком длинное сообщение!");
 
     new playerName[MAX_PLAYER_NAME];
     GetPlayerName(playerid, playerName, sizeof(playerName));
@@ -1765,7 +1770,7 @@ CMD:givecash(playerid, params[])
 
     new targetID, amount;
     if (sscanf(params, "ui", targetID, amount) || amount < 1 || amount > 100000000 || !IsPlayerConnected(targetID))
-        return SCM(playerid, color_red, ""USC"Введите: "c_lightyellow"/givemoney [id игрока] [деньги 1-100000000]");
+        return SendClientMessage(playerid, color_red, ""USC"Введите: "c_lightyellow"/givemoney [id игрока] [деньги 1-100000000]");
 
     GivePlayerCash(targetID, amount);
 
@@ -1783,13 +1788,13 @@ CMD:setweather(playerid, params[])
     
     if (sscanf(params, "i", params[0]))
     {
-        SCM(playerid, color_white, ""USC"Введите: "c_lightyellow"/setweather [погода (0-20)]");
+        SendClientMessage(playerid, color_white, ""USC"Введите: "c_lightyellow"/setweather [погода (0-20)]");
         return 1;
     }
 
     if (params[0] < 0 || params[0] > 45)
     {
-        SCM(playerid, color_white, "Уровень погоды должен быть от 0 до 20.");
+        SendClientMessage(playerid, color_white, "Уровень погоды должен быть от 0 до 20.");
         return 1;
     }
 
@@ -1912,7 +1917,7 @@ CMD:goto(playerid, params[])
 {
     if(GetPlayerAdminEx(playerid) < 1) return 1;
     
-	extract params -> new to_player; else return SCM(playerid, color_white, !""USC"Введите: "c_lightyellow"/goto [id]");
+	extract params -> new to_player; else return SendClientMessage(playerid, color_white, !""USC"Введите: "c_lightyellow"/goto [id]");
 	new Float:x, Float:y, Float:z;
 	GetPlayerPos(to_player, x, y, z);
 	new vw = GetPlayerVirtualWorld(to_player);
@@ -1939,7 +1944,7 @@ CMD:gethere(playerid, params[])
 {
     if(GetPlayerAdminEx(playerid) < 2) return 1;
     
-    extract params -> new to_player; else return SCM(playerid, color_white, !""USC"Введите: "c_lightyellow"/gethere [id]");
+    extract params -> new to_player; else return SendClientMessage(playerid, color_white, !""USC"Введите: "c_lightyellow"/gethere [id]");
     new Float:x, Float:y, Float:z;
     GetPlayerPos(playerid, x, y, z);
     new vw = GetPlayerVirtualWorld(playerid);
@@ -1949,7 +1954,7 @@ CMD:gethere(playerid, params[])
     SetPlayerInterior(to_player, int);
 	new str[144];
 	format(str, sizeof(str), ""SC"Администратор %s[%i] телепортировал Вас к себе", player_info[playerid][pName], playerid);
-	SCM(to_player, color_white, str);
+	SendClientMessage(to_player, color_white, str);
 	
 	new fmt_text[128];
 	format(fmt_text, sizeof(fmt_text), "[A] Администратор %s[%d] телепортировал к себе %s[%d]",
@@ -1966,7 +1971,7 @@ CMD:gethere(playerid, params[])
 CMD:s(playerid, params[])
 {
     new str[128];
-	if(sscanf(params, "s[128]", params[0])) return SCM(playerid, color_white, ""USC"Введите: "c_lightyellow"/s [текст]");
+	if(sscanf(params, "s[128]", params[0])) return SendClientMessage(playerid, color_white, ""USC"Введите: "c_lightyellow"/s [текст]");
 	format(str, sizeof (str), ""c_white"%s[%i] кричит: %s", player_info[playerid][pName], playerid, params[0]);
 	SetPlayerChatBubble(playerid, params[0], color_white, 40.0, 5*1000);
 	ProxDetector(40.0, playerid, str, color_white, color_white, color_white, color_gray, color_gray);
@@ -1977,7 +1982,7 @@ CMD:s(playerid, params[])
 CMD:b(playerid, params[])
 {
 	new str[128];
-	if(sscanf(params, "s[128]", params[0])) return SCM(playerid, color_white, ""USC"Введите: "c_lightyellow"/b [текст]");
+	if(sscanf(params, "s[128]", params[0])) return SendClientMessage(playerid, color_white, ""USC"Введите: "c_lightyellow"/b [текст]");
 	format(str, sizeof (str), ""c_white"%s[%i]: (( %s ))", player_info[playerid][pName], playerid, params[0]);
 	SetPlayerChatBubble(playerid, params[0], color_gray, 15.0, 5*1000);
 	ProxDetector(40.0, playerid, str, color_white, color_white, color_white, color_gray, color_gray);
@@ -1987,7 +1992,7 @@ CMD:b(playerid, params[])
 CMD:me(playerid, params[])
 {
     new str[128];
-	if(sscanf(params, "s[128]", params[0])) return SCM(playerid, color_white, ""USC"Введите: "c_lightyellow"/me [действие]");
+	if(sscanf(params, "s[128]", params[0])) return SendClientMessage(playerid, color_white, ""USC"Введите: "c_lightyellow"/me [действие]");
 	format(str, sizeof (str), "%s %s", player_info[playerid][pName], params[0]);
 	SetPlayerChatBubble(playerid, params[0], color_purple, 20.0, 5*1000);
 	ProxDetector(40.0, playerid, str, color_white, color_white, color_white, color_gray, color_gray);
@@ -1997,7 +2002,7 @@ CMD:me(playerid, params[])
 CMD:do(playerid, params[])
 {
     new str[128];
-	if(sscanf(params, "s[128]", params[0])) return SCM(playerid, color_white, ""USC"Введите: "c_lightyellow"/do [действие]");
+	if(sscanf(params, "s[128]", params[0])) return SendClientMessage(playerid, color_white, ""USC"Введите: "c_lightyellow"/do [действие]");
 	format(str, sizeof (str), "%s (%s)", params[0], player_info[playerid][pName]);
 	SetPlayerChatBubble(playerid, params[0], color_purple, 20.0, 5*1000);
 	ProxDetector(40.0, playerid, str, color_white, color_white, color_white, color_gray, color_gray);
@@ -2008,7 +2013,7 @@ CMD:try(playerid, params[])
 {
     new str[128];
 	new rand = random(2);
-	if(sscanf(params, "s[128]", params[0])) return SCM(playerid, color_white, ""USC"Введите: "c_lightyellow"/try [действие]");
+	if(sscanf(params, "s[128]", params[0])) return SendClientMessage(playerid, color_white, ""USC"Введите: "c_lightyellow"/try [действие]");
 	if(rand == 1) format(str, sizeof (str), "%s %s {5CDF34} [Удачно]", player_info[playerid][pName], params[0]);
 	else format(str, sizeof (str), "%s %s "c_red" [Неудачно]", player_info[playerid][pName], params[0]);
 	SetPlayerChatBubble(playerid, params[0], color_purple, 20.0, 5*1000);
@@ -2024,7 +2029,7 @@ CMD:skin(playerid)
 		!"1. Бесплатные скины\n\
 		2. Платные скины", !"Далее", !"Отмена");
 	}
-	else return SCM(playerid, color_gray, ""USC"Вы должны быть на ногах.");
+	else return SendClientMessage(playerid, color_gray, ""USC"Вы должны быть на ногах.");
 	return 1;
 }
 
@@ -2056,11 +2061,11 @@ CMD:time(playerid, params[])
         {
             new remaining_time_msg[64];
             format(remaining_time_msg, sizeof(remaining_time_msg), "До конца мута: %d секунд", remaining_time);
-            SCM(playerid, color_gray, remaining_time_msg);
+            SendClientMessage(playerid, color_gray, remaining_time_msg);
         }
         else
         {
-            SCM(playerid, color_gray, "Вы размучены.");
+            SendClientMessage(playerid, color_gray, "Вы размучены.");
         }
     }
 
@@ -2072,7 +2077,7 @@ CMD:msg(playerid, params[])
     if(GetPlayerAdminEx(playerid) < 3) return 1;
 
     new msg[144];
-    if (sscanf(params, "s[144]", msg)) return SCM(playerid, color_white, ""USC"Введите: "c_lightyellow"/msg [текст]");
+    if (sscanf(params, "s[144]", msg)) return SendClientMessage(playerid, color_white, ""USC"Введите: "c_lightyellow"/msg [текст]");
 
     new finalMsg[200];
     format(finalMsg, sizeof(finalMsg), "[Администратор] %s: %s", player_info[playerid][pName], msg);
@@ -2084,10 +2089,10 @@ CMD:msg(playerid, params[])
 
 CMD:v(playerid, params[])
 {
-	if(player_info[playerid][pMute] >= 1) return SCM(playerid, color_gray, "У вас активный мут.");
+	if(player_info[playerid][pMute] >= 1) return SendClientMessage(playerid, color_gray, "У вас активный мут.");
 	
     new msg[144];
-    if (sscanf(params, "s[144]", msg)) return SCM(playerid, color_white, ""USC"Введите: "c_lightyellow"/v [текст]");
+    if (sscanf(params, "s[144]", msg)) return SendClientMessage(playerid, color_white, ""USC"Введите: "c_lightyellow"/v [текст]");
 
     new finalMsg[200];
     if(GetPlayerAdminEx(playerid) >= 1)
@@ -2135,7 +2140,7 @@ CMD:ahelp(playerid, params[])
 
 CMD:mm(playerid)
 {
-	SCM(playerid, color_white, "button 1");
+	SendClientMessage(playerid, color_white, "button 1");
 }
 
 CMD:sp(playerid, params[])
@@ -2144,7 +2149,7 @@ CMD:sp(playerid, params[])
 
     new to_player;
     if (sscanf(params, "u", to_player)) 
-        return SCM(playerid, color_white, ""USC"Введите: "c_lightyellow"/sp [id игрока]");
+        return SendClientMessage(playerid, color_white, ""USC"Введите: "c_lightyellow"/sp [id игрока]");
 
     if (!IsPlayerConnected(to_player))
         return SendClientMessage(playerid, 0x999999FF, "Такого игрока нет");
@@ -2193,7 +2198,7 @@ CMD:asp(playerid, params[])
 
     new to_player;
     if (sscanf(params, "u", to_player)) 
-        return SCM(playerid, color_white, ""USC"Введите: "c_lightyellow"/asp [id игрока]");
+        return SendClientMessage(playerid, color_white, ""USC"Введите: "c_lightyellow"/asp [id игрока]");
 
     if (!IsPlayerConnected(to_player))
         return SendClientMessage(playerid, 0x999999FF, "Такого игрока нет");
@@ -2339,7 +2344,7 @@ CMD:dellwlist(playerid, params[])
     }
     else
     {
-        SCM(playerid, color_red, !"данного акка нет в вл");
+        SendClientMessage(playerid, color_red, !"данного акка нет в вл");
     }
 
     cache_delete(result);
@@ -2378,11 +2383,11 @@ CMD:ban(playerid, params[])
     new string:reason[64];
 
     if (sscanf(params, "i[8] i[8] s[64]", targetID, ban_time, reason)) {
-        return SCM(playerid, color_red, ""USC"Введите: "c_lightyellow"/ban [ID игрока] [длительность] [причина]");
+        return SendClientMessage(playerid, color_red, ""USC"Введите: "c_lightyellow"/ban [ID игрока] [длительность] [причина]");
     }
 
     if (targetID < 0 || targetID >= MAX_PLAYERS || !IsPlayerConnected(targetID)) {
-        return SCM(playerid, color_red, ""USC"Игрок с таким ID не найден.");
+        return SendClientMessage(playerid, color_red, ""USC"Игрок с таким ID не найден.");
     }
 
     new max_days = player_info[playerid][pAdmin] < 3 ? 365 : 30;
@@ -2391,14 +2396,14 @@ CMD:ban(playerid, params[])
     if (!(1 <= ban_time && ban_time <= max_days))
     {
         format(fmt_msg, sizeof(fmt_msg), ""USC"Срок бана может быть от 1 до %d дней", max_days);
-        return SCM(playerid, color_red, fmt_msg);
+        return SendClientMessage(playerid, color_red, fmt_msg);
     }
 
     if (player_info[targetID][pAdmin] > player_info[playerid][pAdmin])
-        return SCM(playerid, color_red, ""USC"Вы не можете забанить администратора с более высоким рангом.");
+        return SendClientMessage(playerid, color_red, ""USC"Вы не можете забанить администратора с более высоким рангом.");
 
     if (targetID == playerid)
-        return SCM(playerid, -1, ""USC"Вы не можете забанить самих себя.");
+        return SendClientMessage(playerid, -1, ""USC"Вы не можете забанить самих себя.");
 
     format(fmt_msg, sizeof(fmt_msg), "Администратор %s забанил игрока %s на %d дней", player_info[playerid][pName], player_info[targetID][pName], ban_time);
 
@@ -2432,17 +2437,17 @@ CMD:getip(playerid, params[])
 
     new targetID;
     if (sscanf(params, "i[8]", targetID))
-        return SCM(playerid, color_red, ""USC"Введите: "c_lightyellow"/getip [ID игрока]");
+        return SendClientMessage(playerid, color_red, ""USC"Введите: "c_lightyellow"/getip [ID игрока]");
 
     if (targetID < 0 || targetID >= MAX_PLAYERS || !IsPlayerConnected(targetID))
-        return SCM(playerid, color_red, ""USC"Игрок с таким ID не найден.");
+        return SendClientMessage(playerid, color_red, ""USC"Игрок с таким ID не найден.");
 
     new ip[16];
     GetPlayerIp(targetID, ip, sizeof(ip));
 
     new msg[128];
     format(msg, sizeof(msg), "IP-адрес игрока %s: %s", player_info[targetID][pName], ip);
-    SCM(playerid, color_green, msg);
+    SendClientMessage(playerid, color_green, msg);
 
     return 1;
 }
@@ -2454,7 +2459,7 @@ CMD:banip(playerid, params[])
 
     new ip[16];
     if (sscanf(params, "s[15]", ip))
-        return SCM(playerid, color_red, ""USC"Введите: "c_lightyellow"/banip [IP-адрес]");
+        return SendClientMessage(playerid, color_red, ""USC"Введите: "c_lightyellow"/banip [IP-адрес]");
 
 
     new query[128];
@@ -2478,7 +2483,7 @@ CMD:unban(playerid, params[])
 	if (player_info[playerid][pAdmin] < 2) return 1;
 
 	if (!strlen(params))
-        return SCM(playerid, color_white, ""USC"Введите: "c_lightyellow"/unban [ник игрока]");
+        return SendClientMessage(playerid, color_white, ""USC"Введите: "c_lightyellow"/unban [ник игрока]");
 
     new player_name[21];
     sscanf(params, "s[64]", player_name); 
@@ -2502,7 +2507,7 @@ CMD:unban(playerid, params[])
 
 	cache_delete(result);
 
-	if(!rows || !uid) return SCM(playerid, color_red, ""USC"Игрок с таким именем не найден");
+	if(!rows || !uid) return SendClientMessage(playerid, color_red, ""USC"Игрок с таким именем не найден");
 
 	mysql_format(dbHandle, query, sizeof query, "SELECT * FROM ban_list WHERE user_id=%d", uid);
 	result = mysql_query(dbHandle, query, true);
@@ -2511,7 +2516,7 @@ CMD:unban(playerid, params[])
 
 	cache_delete(result);
 
-	if(!rows) return SCM(playerid, color_red, ""USC"Аккаунт игрока не заблокирован");
+	if(!rows) return SendClientMessage(playerid, color_red, ""USC"Аккаунт игрока не заблокирован");
 
 	mysql_format(dbHandle, query, sizeof query, "DELETE FROM ban_list WHERE user_id=%d", uid);
 	mysql_query(dbHandle, query, false);
@@ -2537,7 +2542,7 @@ CMD:spermban(playerid, params[])
         return 1;
 
     if (!strlen(params))
-        return SCM(playerid, color_white, ""USC"Введите команду: "c_lightyellow"/spermban [ник игрока] [причина]");
+        return SendClientMessage(playerid, color_white, ""USC"Введите команду: "c_lightyellow"/spermban [ник игрока] [причина]");
 
     new to_player;
     new string:reason[64]; 
@@ -2549,14 +2554,14 @@ CMD:spermban(playerid, params[])
 
     to_player = GetPlayerIDByName(paramsString);
     if (to_player == -1)
-        return SCM(playerid, color_gray, "Игрок с таким ником не найден.");
+        return SendClientMessage(playerid, color_gray, "Игрок с таким ником не найден.");
 
 
     if (player_info[to_player][pAdmin] > player_info[playerid][pAdmin])
-        return SCM(playerid, color_gray, "Вы не можете забанить администратора с большим рангом.");
+        return SendClientMessage(playerid, color_gray, "Вы не можете забанить администратора с большим рангом.");
 
     if (to_player == playerid)
-        return SCM(playerid, color_gray, "Вы не можете забанить самих себя.");
+        return SendClientMessage(playerid, color_gray, "Вы не можете забанить самих себя.");
 
 
     new fmt_msg[128];
@@ -2592,22 +2597,22 @@ CMD:mute(playerid, params[])
 
     new targetID, mute_duration, string:reason[64];
     if (sscanf(params, "i[8] i[8] s[64]", targetID, mute_duration, reason)) {
-        SCM(playerid, color_gray, ""USC"Введите: "c_lightyellow"/mute [ID] [длительность] [причина]");
+        SendClientMessage(playerid, color_gray, ""USC"Введите: "c_lightyellow"/mute [ID] [длительность] [причина]");
         return 1;
     }
 
     if (mute_duration < 1 || mute_duration > MAX_MUTE_DURATION) {
-        SCM(playerid, color_gray, ""USC"Длительность мута должна быть от 1 до 60 минут.");
+        SendClientMessage(playerid, color_gray, ""USC"Длительность мута должна быть от 1 до 60 минут.");
         return 1;
     }
 
     if (targetID < 0 || targetID >= MAX_PLAYERS || !IsPlayerConnected(targetID)) {
-        SCM(playerid, color_gray, ""USC"Игрок с таким ID не найден.");
+        SendClientMessage(playerid, color_gray, ""USC"Игрок с таким ID не найден.");
         return 1;
     }
 
     if (player_info[targetID][pMute] == 1) {
-        SCM(playerid, color_gray, ""USC"У игрока уже есть мут.");
+        SendClientMessage(playerid, color_gray, ""USC"У игрока уже есть мут.");
         return 1;
     }
 
@@ -2632,18 +2637,18 @@ CMD:unmute(playerid, params[])
 
     new playerName[32];
     if (sscanf(params, "s[32]", playerName)) {
-        SCM(playerid, color_white, ""USC"Введите: "c_lightyellow"/unmute [ник игрока]");
+        SendClientMessage(playerid, color_white, ""USC"Введите: "c_lightyellow"/unmute [ник игрока]");
         return 1;
     }
 
     new to_player = GetPlayerIDByName(playerName);
     if (to_player == -1) {
-        SCM(playerid, color_red, ""USC"Игрок с таким ником не найден.");
+        SendClientMessage(playerid, color_red, ""USC"Игрок с таким ником не найден.");
         return 1;
     }
 
     if (player_info[to_player][pMute] == 0) {
-        SCM(playerid, color_red, ""USC"Игрок не замучен.");
+        SendClientMessage(playerid, color_red, ""USC"Игрок не замучен.");
         return 1;
     }
 
@@ -2654,7 +2659,7 @@ CMD:unmute(playerid, params[])
     format(fmt_msg, sizeof(fmt_msg), "Администратор %s размутил игрока %s", player_info[playerid][pName], player_info[to_player][pName]);
     SCMTA(color_red, fmt_msg);
 
-    SCM(to_player, color_gray, "Доступ в чат восстановлен.");
+    SendClientMessage(to_player, color_gray, "Доступ в чат восстановлен.");
 
     format(fmt_msg, sizeof(fmt_msg), "Снял блокировку чата у %s[acc:%d]", player_info[to_player][pName], player_info[to_player][pId]);
     SendLog(playerid, LOG_TYPE_ADMIN_ACTION, fmt_msg);
@@ -2670,10 +2675,10 @@ CMD:kick(playerid, params[])
     new to_player, reason[30];
 
     if (sscanf(params, "i s[30]", to_player, reason))
-        return SCM(playerid, color_white, ""USC"Введите: "c_lightyellow"/kick [id игрока] [причина]");
+        return SendClientMessage(playerid, color_white, ""USC"Введите: "c_lightyellow"/kick [id игрока] [причина]");
 
     if (!IsPlayerConnected(to_player))
-        return SCM(playerid, color_red, ""USC"Такого игрока нет.");
+        return SendClientMessage(playerid, color_red, ""USC"Такого игрока нет.");
 
     new fmt_msg[128];
     format(fmt_msg, sizeof fmt_msg, "Администратор %s кикнул игрока %s. Причина: %s", player_info[playerid][pName], player_info[to_player][pName], reason);
@@ -2697,10 +2702,10 @@ CMD:slap(playerid, params[])
     new target_id;
 
     if (sscanf(params, "i", target_id))
-        return SCM(playerid, color_white, ""USC"Введите: "c_lightyellow"/slap [id игрока]");
+        return SendClientMessage(playerid, color_white, ""USC"Введите: "c_lightyellow"/slap [id игрока]");
 
     if (!IsPlayerConnected(target_id))
-        return SCM(playerid, color_red, ""USC"Такого игрока нет.");
+        return SendClientMessage(playerid, color_red, ""USC"Такого игрока нет.");
 
     new Float:x, Float:y, Float:z;
     GetPlayerPos(target_id, x, y, z);
@@ -2712,7 +2717,7 @@ CMD:slap(playerid, params[])
     format(fmt_msg, sizeof(fmt_msg), "[A] %s %s[%d] подбросил игрока %s[%i]", player_info[playerid][pPrefix], player_info[playerid][pName], playerid, player_info[target_id][pName], target_id);
     AdmMSG(color_gray, fmt_msg);
 
-    SCM(target_id, color_blue, "Вас подбросил администратор!");
+    SendClientMessage(target_id, color_blue, "Вас подбросил администратор!");
 
     return 1;
 }
@@ -2782,15 +2787,15 @@ CMD:vget(playerid, params[])
 	if (player_info[playerid][pAdmin] < 2)
         return 1;
 
-	extract params -> new vehicleid; else return SCM(playerid, color_white, ""USC"Введите: "c_lightyellow"/vget [id транспорта]");
-	if(!IsValidVehicle(vehicleid)) return SCM(playerid, color_white, ""USC"Данного транспорта не существует на сервере.");
+	extract params -> new vehicleid; else return SendClientMessage(playerid, color_white, ""USC"Введите: "c_lightyellow"/vget [id транспорта]");
+	if(!IsValidVehicle(vehicleid)) return SendClientMessage(playerid, color_white, ""USC"Данного транспорта не существует на сервере.");
 
 	new Float: x, Float: y, Float: z;
 	GetPlayerPos(playerid, x, y, z);
 
 	SetVehiclePos(vehicleid, x + 2.0, y + 2.0, z);
 
-	SCM(playerid, color_white, ""SC"Вы телепортировали авто к себе.");
+	SendClientMessage(playerid, color_white, ""SC"Вы телепортировали авто к себе.");
 
 	new fmt_msg[105];
 
@@ -2819,7 +2824,7 @@ CMD:admins(playerid, params[])
         strcat(dialog, string, sizeof(dialog)); 
         count++;
     }
-    if (!count) SCM(playerid, color_gray, "Нет администрации в сети");
+    if (!count) SendClientMessage(playerid, color_gray, "Нет администрации в сети");
 
     SPD(playerid, d_none, DSL, "{FFFFFF}Список администрации", dialog, "Закрыть", "");
     SendLog(playerid, LOG_TYPE_ADMIN_ACTION, "Смотрит список администрации");
@@ -2839,7 +2844,7 @@ CMD:csettime(playerid, params[])
 	new fmt_text[265];
 	
 	format(fmt_text, sizeof fmt_text, "Вы установили время %02d:00 у себя", time);
-    SCM(playerid, color_blue, fmt_text);
+    SendClientMessage(playerid, color_blue, fmt_text);
     
 	return 1;
 }
@@ -2851,11 +2856,11 @@ CMD:askin(playerid)
     if(!isAdminSkin[playerid])
     {
         SetPlayerSkin(playerid, 122);
-        SCM(playerid, color_white, ""SC"Вы успешно надели скин администратора.");
+        SendClientMessage(playerid, color_white, ""SC"Вы успешно надели скин администратора.");
         isAdminSkin[playerid] = true;
     } else {
         SetPlayerSkin(playerid, GetPlayerData(playerid, pSkin));
-        SCM(playerid, color_white, ""SC"Вы сняли скин администратора.");
+        SendClientMessage(playerid, color_white, ""SC"Вы сняли скин администратора.");
         isAdminSkin[playerid] = false;
     }
 }
@@ -2866,7 +2871,7 @@ CMD:az(playerid)
 
     SetPlayerInterior(playerid, 12);
     SetPlayerPos(playerid, 2324.38, -1148.48, 1050.71);
-    SCM(playerid, color_white, ""SC"вы успешно телепортировались в админ-зону.");
+    SendClientMessage(playerid, color_white, ""SC"вы успешно телепортировались в админ-зону.");
     return 1;
 }
 

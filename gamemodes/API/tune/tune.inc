@@ -2,13 +2,17 @@
 
 // ............. [ DEFINES ] .............
 #define SPD ShowPlayerDialog
-#define SCM SendClientMessage
 #define DSL DIALOG_STYLE_LIST
 #define SC "{ffff00}| {ffffff}"
 #define USC "{ff2400}| {ffffff}"
 // ............. [ COLORS ] .............
-#define color_white 0xFFFFFF
-#define         color_gray              0x999999
+#if !defined color_white
+    #define color_white 0xffffffAA
+#endif
+
+#if !defined color_gray
+    #define color_gray 0x999999AA
+#endif
 // ............. [ NEWS ] .............
 // ............. [ DIALOGS ] .............
 DIALOG_TUNE(playerid)
@@ -59,7 +63,7 @@ CMD:tune(playerid)
 	{
 	    DIALOG_TUNE(playerid);
 	}
-	else return SCM(playerid, color_gray, ""USC"Вы должны быть за рулем.");
+	else return SendClientMessage(playerid, color_gray, ""USC"Вы должны быть за рулем.");
 	return 1;
 }
 
