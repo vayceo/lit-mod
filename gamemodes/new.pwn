@@ -1144,6 +1144,20 @@ stock SetPlayerSpawn(playerid)
     SetPlayerVirtualWorld(playerid, 0);
     SetPlayerInterior(playerid, 0);
     SetCameraBehindPlayer(playerid);
+    
+    // maybe for DM-Zone
+    
+    SetPlayerSkillLevel(playerid, 0, 999);
+	SetPlayerSkillLevel(playerid, 1, 999);
+	SetPlayerSkillLevel(playerid, 2, 999);
+	SetPlayerSkillLevel(playerid, 3, 999);
+	SetPlayerSkillLevel(playerid, 4, 999);
+	SetPlayerSkillLevel(playerid, 5, 999);
+	SetPlayerSkillLevel(playerid, 6, 999);
+	SetPlayerSkillLevel(playerid, 7, 999);
+	SetPlayerSkillLevel(playerid, 8, 999);
+	SetPlayerSkillLevel(playerid, 9, 999);
+	SetPlayerSkillLevel(playerid, 10, 999);
 
 	StopAudioStreamForPlayer(playerid);
 
