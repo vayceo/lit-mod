@@ -21,7 +21,7 @@ Dialog_Create:LIST_MUSIC(playerid)
     Dialog_Open
     (
         playerid, Dialog:LIST_MUSIC, DSL, 
-        ""br""SERVER_NAME" {FFFFFFF}| LitSound",
+        ""br""SHORT_NAME" {FFFFFFF}| LitSound",
         ""br"1. {FFFFFF}FORTUNA 812\n"\
         ""br"2. {FFFFFF}Литвин",
         "Выбрать", "Закрыть"

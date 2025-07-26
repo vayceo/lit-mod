@@ -19,7 +19,7 @@ DIALOG_CAR(playerid)
     Dialog_Open
     (
         playerid, Dialog:CAR_LIST, DSL, 
-        "{3FD7D0}LIT MOBILE {FFFFFF}| юбрн", 
+        "{3FD7D0}"SHORT_NAME" {FFFFFF}| юбрн", 
         "VAZ\n\
         Mercedes\n\
         BMW\n\

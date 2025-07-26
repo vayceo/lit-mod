@@ -79,6 +79,7 @@ main(); // what is that?
 
 #define br   "{FF6347}"
 #define SERVER_NAME 	"LIT MOBILE"
+#define SHORT_NAME "LIT"
 // ............. [ DEFINES ] .............
 #define SPD ShowPlayerDialog
 #define Send SendClientMessage
@@ -710,7 +711,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					case 6: format(dialog, sizeof(dialog), "(все команды)");
 		            case 7: format(dialog, sizeof(dialog), "(все команды)");
 		        }
-		        ShowPlayerDialog(playerid, d_none, DIALOG_STYLE_MSGBOX, "{3FD7D0}LIT {FFFFFF}| СПРАВКА", dialog, "Ок", "");
+		        ShowPlayerDialog(playerid, d_none, DIALOG_STYLE_MSGBOX, "{3FD7D0}"SHORT_NAME" {FFFFFF}| СПРАВКА", dialog, "Ок", "");
 		    }
 		}
     	case d_tp:
@@ -1336,7 +1337,7 @@ stock IsValidVehicle(vehicleid)
 
 stock ShowHelp(playerid)
 {
-    SPD(playerid, d_none, DSM, !"{3FD7D0}LIT {FFFFFF}| ПОМОЩЬ",
+    SPD(playerid, d_none, DSM, !"{3FD7D0}"SHORT_NAME" {FFFFFF}| ПОМОЩЬ",
     "{FFFFFF}/car - Спавн автомобиля\n\
     {FFFFFF}/skin - Выбор скина\n\
     {FFFFFF}/tune - Настройка тюнинга\n\
@@ -1546,7 +1547,7 @@ stock SetConnectServer(playerid)
 stock ShowFreeSkin(playerid)
 {
 	SPD(playerid, d_skin_set, DSL,
-                        !"{3FD7D0}LIT {FFFFFF}| Бесплатные",
+                        !"{3FD7D0}"SHORT_NAME" {FFFFFF}| Бесплатные",
                         !"1. EA7\n\
                         2. Темщик\n\
                         3. Абушка\n\
@@ -1570,7 +1571,7 @@ stock ShowPersonSkin(playerid)
 	/*if(запрос в базу)
 	{
 		SPD(playerid, d_person_skin, DSL,
-							!"{3FD7D0}LIT {FFFFFF}| Платные",
+							!"{3FD7D0}"SHORT_NAME" {FFFFFF}| Платные",
 							!"1. тест\n\
 							2. тест", 
 							!"Выбрать", !"Отмена");
@@ -1696,7 +1697,7 @@ CMD:skin(playerid)
 {
 	if(GetPlayerState(playerid) == PLAYER_STATE_ONFOOT)
 	{
-	    SPD(playerid, d_skin, DSL, !"{3FD7D0}LIT {FFFFFF}| СКИНЫ", 
+	    SPD(playerid, d_skin, DSL, !"{3FD7D0}"SHORT_NAME" {FFFFFF}| СКИНЫ",
 		!"1. Бесплатные скины\n\
 		2. Платные скины", !"Далее", !"Отмена");
 	}
@@ -1794,7 +1795,7 @@ CMD:tp(playerid)
                                    8. Аэропорт №1\n\
 								   9. Аэропорт №2");
 
-    SPD(playerid, d_tp, DSL, "{3FD7D0}LIT {FFFFFF}| ТЕЛЕПОРТ", dialog, "Выбрать", "Отмена");
+    SPD(playerid, d_tp, DSL, "{3FD7D0}"SHORT_NAME" {FFFFFF}| ТЕЛЕПОРТ", dialog, "Выбрать", "Отмена");
     return 1;
 }
 

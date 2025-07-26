@@ -20,7 +20,7 @@ DIALOG_TUNE(playerid)
     Dialog_Open
     (
         playerid, Dialog:TUNE, DSL, 
-        "{3FD7D0}LIT MOBILE {FFFFFF}| ТЮНИНГ",
+        "{3FD7D0}"SHORT_NAME" {FFFFFF}| ТЮНИНГ",
         "{FFFFFF}| Сменить цвет\n\
 		Компоненты",
         "Далее", "Отмена"
@@ -33,7 +33,7 @@ DIALOG_COLOR(playerid)
     Dialog_Open
     (
         playerid, Dialog:COLOR, DSL, 
-        "LIT MOBILE | Выберите цвет", 
+        ""SHORT_NAME" | Выберите цвет", 
         "Белый\n\
         Черный\n\
         Красный\n\
@@ -49,7 +49,7 @@ DIALOG_COMP(playerid)
     Dialog_Open
     (
         playerid, Dialog:COMP, DSL, 
-        "LIT MOBILE | Выберите компонент",
+        ""SHORT_NAME" | Выберите компонент",
         "Гидравлика\n\
         Нитро",
         "Выбрать", "Закрыть"

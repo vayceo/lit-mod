@@ -463,7 +463,7 @@ CMD:astats(playerid, params[])
 						           AdminStats[playerid][kicks],
 						           AdminStats[playerid][warns]);
 
-    SPD(playerid, d_none, DSL, "{3FD7D0}LIT {FFFFFF}| СТАТИСТИКА", dialog, "Закрыть", "");
+    SPD(playerid, d_none, DSL, "{3FD7D0}"SHORT_NAME" {FFFFFF}| СТАТИСТИКА", dialog, "Закрыть", "");
     return 1;
 }
 
@@ -921,7 +921,7 @@ CMD:ahelp(playerid, params[])
                                    7. Куратор\n\
                                    8. Основатель\n");
 
-    SPD(playerid, d_ahelp, DSL, "{3FD7D0}LIT {FFFFFF}| СПРАВКА", dialog, "Выбрать", "Отмена");
+    SPD(playerid, d_ahelp, DSL, "{3FD7D0}"SHORT_NAME" {FFFFFF}| СПРАВКА", dialog, "Выбрать", "Отмена");
     return 1;
 }
 
