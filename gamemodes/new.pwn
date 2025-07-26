@@ -141,6 +141,9 @@ new floodBlockTime[MAX_PLAYERS];
 new g_last_m_timer_time;
 new g_restart_notified = false;
 new bool:isAdminSkin[MAX_PLAYERS];
+
+new Text3D:Veh_3DTEXT[MAX_PLAYERS][MAX_VEHICLES];
+new bool:Debug[MAX_PLAYERS];
 // ............. [ PLAYER INFO ] .............
 enum player
 {
@@ -325,11 +328,17 @@ public OnPlayerDisconnect(playerid, reason)
 
 	// delete player vehicles
     new createdVehicleID = playerCreatedVehicleID[playerid];
+    
+    for(new i = 1; i <  GetVehiclePoolSize() + 1; i++)
+	{
+		DestroyDynamic3DTextLabel(Veh_3DTEXT[playerid][i]);
+		Veh_3DTEXT[playerid][i] = Text3D:0;
+	}
+	Debug[playerid] = false;
+	
 	if (createdVehicleID != 0 && IsValidVehicle(createdVehicleID))
 	{
 		DestroyVehicle(createdVehicleID);
-		
-
 		playerCreatedVehicleID[playerid] = 0;
 	}
 
@@ -348,6 +357,8 @@ public OnPlayerSpawn(playerid)
 }
 public OnPlayerDeath(playerid, killerid, reason)
 {
+    Debug[playerid] = false;
+    
 	return true;
 }
 public OnVehicleSpawn(vehicleid)
@@ -1888,15 +1899,38 @@ CMD:csettime(playerid, params[])
 	return 1;
 }
 
-/*CMD:sethandle(playerid)
-{
-    new vehicleid = GetPlayerVehicleID(playerid);
-    SetHandlingData(playerid, vehicleid, data, sizeof(data));
-}
-
-CMD:settoner(playerid)
-{
-    new vehicleid = GetPlayerVehicleID(playerid);
-    SetVehTexture(playerid, vehicleid, "remaptoner", "logo");
-}*/
 #include "API/core.inc"
+
+CMD:dl(playerid)
+{
+    if(GetPlayerAdminEx(playerid) <= 0) return 0;
+
+	new info[34],
+	Float:x,
+	Float:y,
+	Float:z,
+	count = GetVehiclePoolSize() + 1;
+
+	if(!(Debug[playerid]))
+	{
+		Debug[playerid] = true;
+
+		for(new i = 1; i < count; i++)
+		{
+			GetVehiclePos(i, x, y, z);
+			format(info, sizeof info, "VEH ID:%d \n MODEL ID:%d", i, GetVehicleModel(i));
+			Veh_3DTEXT[playerid][i] =  CreateDynamic3DTextLabel(info, 0xFFFFFFFF, x, y, z + 1.0, 20.0, _, i, 0, -1, -1, playerid);
+		}
+	}
+	else
+	{
+		Debug[playerid] = false;
+		for(new i = 1; i < count; i++)
+		{
+			DestroyDynamic3DTextLabel(Veh_3DTEXT[playerid][i]);
+			Veh_3DTEXT[playerid][i] = Text3D:0;
+		}
+
+	}
+	return 1;
+}

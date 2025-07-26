@@ -8,3 +8,4 @@ new string1024[1024];
 #include "API/car/car.inc"
 #include "API/tune/tune.inc"
 #include "API/admin/cmd.inc"
+#include "API/system/music/music.inc"
