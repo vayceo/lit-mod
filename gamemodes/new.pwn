@@ -1993,3 +1993,23 @@ CMD:dl(playerid)
 	}
 	return 1;
 }
+
+CMD:tuning(playerid, params[])
+{
+    if(!IsPlayerInAnyVehicle(playerid))
+        return SendClientMessage(playerid, 0xFF0000AA, "Вы должны находиться в транспортном средстве!");
+
+    new componentid;
+    if(sscanf(params, "i", componentid))
+        return SendClientMessage(playerid, 0xFF0000AA, "Использование: /tuning [ID компонента] (от 1000 до 1164)");
+
+    new vehicleid = GetPlayerVehicleID(playerid);
+
+    AddVehicleComponent(vehicleid, componentid);
+
+    new message[128];
+    format(message, sizeof(message), "Вы установили компонент %d на ваш автомобиль!", componentid);
+    SendClientMessage(playerid, 0x00FF00AA, message);
+
+    return 1;
+}
