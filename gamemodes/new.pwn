@@ -175,6 +175,43 @@ enum
 	d_color,
 	d_strab
 }
+// ............. [TP LIST ] .............
+enum E_TELEPORT_LIST {
+    Float:tpX,
+    Float:tpY,
+    Float:tpZ,
+    tpName[20] // вроде будет достаточно
+};
+
+new const TeleportList[][E_TELEPORT_LIST] = {
+    // X,           Y,            Z,        Название
+    {570.8985,    845.2556,    -42.0601,   "Шахта (Вход)"},
+    {25.2571,     2016.1414,   17.6406,    "Оружейный завод"},
+    {1033.8883,   -325.4606,   73.9922,    "Сепаратисты (Вход)"},
+    {461.7169,    -1500.8733,  31.0444,    "Магазин одежды"},
+    {1956.7321,   -2183.5529,  13.5468,    "Клуб парашютистов"},
+    {1455.9126,   751.0781,    11.0234,    "Итальянская мафия"},
+    {691.5789,    -1275.8549,  13.5607,    "Китайская мафия"},
+    {-2719.3574,  -319.1553,   7.8438,     "Русская мафия"},
+    {-2520.9468,  -624.9526,   132.7846,   "Центр новостей"},
+    {2259.4182,   -1019.1157,  59.2972,    "Вагос (Вход)"},
+    {2495.3813,   -1691.1393,  14.7656,    "Грув (Вход)"},
+    {2148.9360,   -1484.8567,  26.6241,    "Баллас (Вход)"},
+    {1898.9922,   -2037.9436,  13.5469,    "Ацтек (Вход)"},
+    {2736.6499,   -1952.5166,  13.5469,    "Рифа (Вход)"},
+    {1368.9955,   -1279.7224,  13.5469,    "Аммуниция (ЛС)"},
+    {-2625.8804,  208.2350,    4.8125,     "Аммуниция (СФ)"},
+    {2159.5447,   943.2023,    10.8203,    "Аммуниция (ЛВ)"},
+    {1038.8992,   1013.1218,   11.0000,    "ФБР (Вход)"},
+    {155.7305,    1901.9454,   18.6063,    "Казарма (Вход)"},
+    {206.9499,    1923.3923,   18.6550,    "Склад оружия"},
+    {-2026.5953,  -102.0658,   35.1641,    "Автошкола"},
+    {1465.0688,   -1009.9221,  26.8438,    "Банк (ЛС)"},
+    {1172.0773,   -1323.3893,  15.4031,    "Больница (ЛС)"},
+    {1482.6595,   -1772.2944,  18.7958,    "Мэрия (ЛС)"},
+    {-2766.5405,  375.6842,    6.3347,     "Мэрия (СФ)"},
+    {2388.9978,   2466.0266,   10.8203,    "Мэрия (ЛВ)"}
+};
 // ............. [ LOGS ] .............
 enum
 {
@@ -714,25 +751,30 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		        ShowPlayerDialog(playerid, d_none, DIALOG_STYLE_MSGBOX, "{3FD7D0}"SHORT_NAME" {FFFFFF}| СПРАВКА", dialog, "Ок", "");
 		    }
 		}
-    	case d_tp:
+     	case d_tp:
 		{
-		    if(response)
-		    {
-          		switch(listitem)
-		        {
-		            case 0: SetPlayerPos(playerid, 2473.467285, -1684.040283, 13.464985);
-		            case 1: SetPlayerPos(playerid, -2237.931152, -1719.397705, 480.84591);
-		            case 2: SetPlayerPos(playerid, 2671.038086, -1683.536987, 9.374851);
-		            case 3: SetPlayerPos(playerid, 425.109039, 2530.754639, 16.626102);
-		            case 4: SetPlayerPos(playerid, 2032.706421, 1007.332703, 10.820312);
-		            case 5: SetPlayerPos(playerid, 155.259232, -1915.843018, 3.773438);
-		            case 6: SetPlayerPos(playerid, 394.549652, -1799.403809, 7.828125);
-		            case 7: SetPlayerPos(playerid, -1607.224487, -148.615891, 14.546875);
-		            case 8: SetPlayerPos(playerid, 1510.404175, 1183.035034, 10.812500);
-		        }
-		    }
+			if(response)
+				{
+        			new spot_id = listitem;
+
+        			if(spot_id >= 0 && spot_id < sizeof(TeleportList))
+        				{
+            				SetPlayerPos(
+            				playerid,
+                			TeleportList[spot_id][tpX],
+                			TeleportList[spot_id][tpY],
+                			TeleportList[spot_id][tpZ]
+       						);
+
+							SendClientMessage(
+                			playerid,
+                			-1,
+                			"Вы телепортированы в {3FD7D0}%s", TeleportList[spot_id][tpName]
+            				);
+        				}
+    				}
+				}
 		}
-	}
 	return true;
 }
 public OnPlayerClickPlayer(playerid, clickedplayerid, source)
@@ -1784,18 +1826,24 @@ CMD:mm(playerid)
 
 CMD:tp(playerid)
 {
-    new dialog[512];
-    format(dialog, sizeof(dialog), "1. Грув стрит\n\
-                                   2. Гора\n\
-                                   3. Кубок\n\
-                                   4. Кладбище самолетов\n\
-                                   5. Казино\n\
-                                   6. Маяк\n\
-                                   7. Набережная\n\
-                                   8. Аэропорт №1\n\
-								   9. Аэропорт №2");
+    new dialog[512], string[64];
+    strcat(dialog, "№\tМесто\n", sizeof(dialog));
 
-    SPD(playerid, d_tp, DSL, "{3FD7D0}"SHORT_NAME" {FFFFFF}| ТЕЛЕПОРТ", dialog, "Выбрать", "Отмена");
+    for(new i = 0; i < sizeof(TeleportList); i++)
+    {
+        format(string, sizeof(string), "%d\t%s\n", i+1, TeleportList[i][tpName]);
+        strcat(dialog, string, sizeof(dialog));
+    }
+
+    ShowPlayerDialog(
+        playerid,
+        d_tp,
+        DIALOG_STYLE_TABLIST_HEADERS,
+        "{3FD7D0}Телепорт {FFFFFF}| Выберите вход",
+        dialog,
+        "Телепорт",
+        "Отмена"
+    );
     return 1;
 }
 
