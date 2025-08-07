@@ -85,26 +85,7 @@ CREATE TABLE `ban_list` (
 --
 
 INSERT INTO `ban_list` (`id`, `user_id`, `time`, `ban_time`, `description`, `admin`) VALUES
-(1, 1515, 1730246400, 1732838400, 'test', 'Tayk_Boss');
-
--- --------------------------------------------------------
-
---
--- Структура таблицы `console_users`
---
-
-CREATE TABLE `console_users` (
-  `id` int(11) NOT NULL,
-  `username` varchar(50) NOT NULL,
-  `password` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Дамп данных таблицы `console_users`
---
-
-INSERT INTO `console_users` (`id`, `username`, `password`) VALUES
-(7, 'tayk14', '$2y$10$OoLCD6emhqtDOmhBYxzsjuawj6oUqEkj1HPVgtvVgfokUDEUeWS4m');
+(1, 1515, 1730246400, 1732838400, 'test', 'Psycho_Bye');
 
 -- --------------------------------------------------------
 
@@ -113,25 +94,26 @@ INSERT INTO `console_users` (`id`, `username`, `password`) VALUES
 --
 
 CREATE TABLE `users` (
-  `ID` int(11) NOT NULL,
-  `Name` varchar(24) NOT NULL,
-  `Pass` varchar(32) NOT NULL,
-  `Email` varchar(46) NOT NULL,
-  `Referal` varchar(24) NOT NULL,
-  `Date Reg` varchar(10) NOT NULL,
-  `Skin` int(3) NOT NULL,
-  `Money` int(11) NOT NULL,
-  `Level` int(4) NOT NULL,
-  `Admin` int(1) NOT NULL,
-  `Mute` int(3) NOT NULL
+  `id` int(11) NOT NULL,
+  `name` varchar(24) NOT NULL,
+  `pass` varchar(32) NOT NULL,
+  `email` varchar(46) NOT NULL,
+  `referal` varchar(24) NOT NULL,
+  `date_reg` varchar(10) NOT NULL,
+  `skin` int(3) NOT NULL,
+  `money` int(11) NOT NULL,
+  `level` int(4) NOT NULL,
+  `admin` int(1) NOT NULL,
+  `mute` int(3) NOT NULL,
+  `prefix` varchar(16) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
 --
--- Дамп данных таблицы `users`
+-- Дамп данных таблицы `accounts`
 --
 
-INSERT INTO `users` (`ID`, `Name`, `Pass`, `Email`, `Referal`, `Date Reg`, `Skin`, `Money`, `Level`, `Admin`, `Mute`) VALUES
-(56, 'Tayk_Boss', 'password', 'test@gmail.com', '', '27/10/2024', 7, 14449444, 1, 5, 0);
+INSERT INTO `accounts` (`id`, `name`, `password`, `email`, `referal`, `date_reg`, `skin`, `money`, `level`, `admin`, `mute`, `prefix`) VALUES
+(56, 'Psycho_Bye', 'password', 'test@gmail.com', '', '27/10/2024', 7, 14449444, 1, 5, 0, '[test]');
 
 -- --------------------------------------------------------
 
@@ -149,7 +131,7 @@ CREATE TABLE `whitelist` (
 --
 
 INSERT INTO `whitelist` (`id`, `name`) VALUES
-(2, 'Tayk_Boss');
+(2, 'Psycho_Bye');
 
 --
 -- Индексы сохранённых таблиц
@@ -174,16 +156,10 @@ ALTER TABLE `ban_list`
   ADD PRIMARY KEY (`id`);
 
 --
--- Индексы таблицы `console_users`
+-- Индексы таблицы `accounts`
 --
-ALTER TABLE `console_users`
+ALTER TABLE `accounts`
   ADD PRIMARY KEY (`id`);
-
---
--- Индексы таблицы `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`ID`);
 
 --
 -- Индексы таблицы `whitelist`
@@ -209,16 +185,10 @@ ALTER TABLE `ban_list`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=635;
 
 --
--- AUTO_INCREMENT для таблицы `console_users`
+-- AUTO_INCREMENT для таблицы `accounts`
 --
-ALTER TABLE `console_users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
-
---
--- AUTO_INCREMENT для таблицы `users`
---
-ALTER TABLE `users`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30853;
+ALTER TABLE `accounts`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30853;
 
 --
 -- AUTO_INCREMENT для таблицы `whitelist`
