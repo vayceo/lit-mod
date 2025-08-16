@@ -90,10 +90,10 @@ INSERT INTO `ban_list` (`id`, `user_id`, `time`, `ban_time`, `description`, `adm
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `users`
+-- Структура таблицы `accounts`
 --
 
-CREATE TABLE `users` (
+CREATE TABLE `accounts` (
   `id` int(11) NOT NULL,
   `name` varchar(24) NOT NULL,
   `pass` varchar(32) NOT NULL,
