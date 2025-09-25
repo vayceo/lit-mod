@@ -96,7 +96,7 @@ INSERT INTO `ban_list` (`id`, `user_id`, `time`, `ban_time`, `description`, `adm
 CREATE TABLE `accounts` (
   `id` int(11) NOT NULL,
   `name` varchar(24) NOT NULL,
-  `pass` varchar(32) NOT NULL,
+  `password` varchar(32) NOT NULL,
   `email` varchar(46) NOT NULL,
   `referal` varchar(24) NOT NULL,
   `date_reg` varchar(10) NOT NULL,
